@@ -1,9 +1,4 @@
-const {
-  SlashCommandBuilder,
-  EmbedBuilder,
-  ModalBuilder,
-  TextInputBuilder,
-} = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { jobList } = require("../../config").Config;
 
@@ -41,7 +36,7 @@ module.exports = {
       await Businesses.create({
         name: name,
         type: type,
-        owner: owner.id || undefined,
+        owner: owner ? owner.id : undefined,
       });
 
       const embed = new EmbedBuilder()

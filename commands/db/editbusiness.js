@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
-const { Sequelize, Op } = require("sequelize");
+const { autocompletes } = require("../../utils/autocompletes");
 const { jobList } = require("../../config").Config;
 
 module.exports = {
@@ -73,11 +73,17 @@ module.exports = {
 
     let data = {};
     if (newname) data = { name: newname };
-    if (type) data = { type: type };
-    if (owner) data = { owner: newowner.id || undefined };
+    else if (type) data = { type: type };
+    else if (owner) data = { owner: newowner ? newowner.id : undefined };
+
+    const businessName = (
+      await Businesses.findByPk(name, {
+        attributes: ["name"],
+      })
+    ).dataValues.name;
 
     const affectedRows = await Businesses.update(data, {
-      where: { name: name },
+      where: { id: name },
     });
 
     if (affectedRows > 0) {
@@ -85,8 +91,8 @@ module.exports = {
         .setColor(0x4f9d69)
         .setTitle("Business Updated")
         .setDescription(
-          `**${newname || name}** has been updated.\n\nChanges:
-          ${newname ? `**${name}** has been renamed to **${newname}**\n` : ""}${type ? `Type was changed to **${type}**\n` : ""}${owner ? `Ownership transferred to **${owner.username}**\n` : ""}`,
+          `**${newname || businessName}** has been updated.\n\nChanges:
+          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to **${owner.username}**\n` : ""}`,
         );
       return interaction.reply({ embeds: [embed] });
     }
@@ -94,32 +100,8 @@ module.exports = {
     const embed = new EmbedBuilder()
       .setColor(0xd84654)
       .setTitle("An Error Occurred")
-      .setDescription(`Could not find a business named **${name}**.`);
+      .setDescription(`Could not find a business named **${businessName}**.`);
     return interaction.reply({ embeds: [embed] });
   },
-  async autocomplete(interaction) {
-    const focusedValue = interaction.options.getFocused();
-
-    try {
-      // Fetch all business names from db
-      const businesses = await Businesses.findAll({
-        attributes: ["name"],
-        where: {
-          name: {
-            [Op.like]: `${focusedValue}%`, // Filter by the user's input
-          },
-        },
-      });
-
-      const choices = businesses.map((business) => ({
-        name: business.name,
-        value: business.name,
-      }));
-
-      await interaction.respond(choices.slice(0, 25));
-    } catch (error) {
-      console.error("Error fetching businesses for autocomplete:", error);
-      await interaction.respond([]);
-    }
-  },
+  autocomplete: autocompletes.businesses,
 };
