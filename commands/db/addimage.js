@@ -9,7 +9,7 @@ module.exports = {
     .addSubcommand((subcommand) =>
       subcommand
         .setName("open")
-        .setDescription("Update open sign")
+        .setDescription("Update open image")
         .addStringOption((option) =>
           option
             .setName("name")
@@ -27,7 +27,7 @@ module.exports = {
     .addSubcommand((subcommand) =>
       subcommand
         .setName("closed")
-        .setDescription("Update the closed sign")
+        .setDescription("Update closed image")
         .addStringOption((option) =>
           option
             .setName("name")
@@ -46,8 +46,6 @@ module.exports = {
     const subcommand = interaction.options.getSubcommand();
     const name = interaction.options.getString("name");
     const image = interaction.options.getAttachment("image").attachment;
-
-    console.log(image);
 
     if (isNaN(name)) {
       const embed = new EmbedBuilder()
