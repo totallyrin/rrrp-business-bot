@@ -17,9 +17,13 @@ module.exports.Config = {
 };
 
 module.exports.Roles = {
-  admin: 1291785100228558909,
+  Admin: 1291785100228558909,
+  Mod: 1291785100228558909,
 };
 
 module.exports.Channels = {
   logs: 1291477637486612604,
+  warnings: 1291848393555054692,
+  closures: 1291848393555054692,
+  openings: 1291848725454520410,
 };
