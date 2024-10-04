@@ -1,11 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { autocompletes } = require("../../utils/autocompletes");
+const { Colours } = require("../../utils/colours");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("close")
-    .setDescription("Close your business")
+    .setName("open")
+    .setDescription("Open your business")
     .addStringOption((option) =>
       option
         .setName("business")
@@ -18,30 +19,37 @@ module.exports = {
 
     if (isNaN(business)) {
       const embed = new EmbedBuilder()
-        .setColor(0xd84654)
+        .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription(`You are not an employee of **${business}**.`);
       return interaction.reply({ embeds: [embed] });
     }
 
-    const { name: businessName, closed_image: image } = (
+    const { name: businessName, open_image: image } = (
       await Businesses.findByPk(business, {
-        attributes: ["name", "closed_image"],
+        attributes: ["name", "open_image"],
       })
     ).dataValues;
 
-    const embed = new EmbedBuilder()
-      .setColor(0xd84654)
-      .setTitle("Closed for Business")
-      .setDescription(`**${businessName}** is now closed.`)
-      .setImage(image);
-    return interaction.reply({ embeds: [embed] });
+    const affectedRows = await Businesses.update(
+      { last_opened: new Date() },
+      { where: { id: business } },
+    );
 
-    // const embed = new EmbedBuilder()
-    //   .setColor(0xd84654)
-    //   .setTitle("An Error Occurred")
-    //   .setDescription(`Could not find a business named **${businessName}**.`);
-    // return interaction.reply({ embeds: [embed] });
+    if (affectedRows > 0) {
+      const embed = new EmbedBuilder()
+        .setColor(Colours.success_light)
+        .setTitle("Open for Business")
+        .setDescription(`**${businessName}** is now open!`)
+        .setImage(image);
+      return interaction.reply({ embeds: [embed] });
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(Colours.error)
+      .setTitle("An Error Occurred")
+      .setDescription(`Could not find a business named **${businessName}**.`);
+    return interaction.reply({ embeds: [embed] });
   },
   autocomplete: autocompletes.businessesEmployees,
 };

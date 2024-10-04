@@ -1,5 +1,6 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, Colors } = require("discord.js");
 const { Businesses } = require("../../utils/db");
+const { Colours } = require("../../utils/colours");
 const { jobList } = require("../../config").Config;
 
 module.exports = {
@@ -40,7 +41,7 @@ module.exports = {
       });
 
       const embed = new EmbedBuilder()
-        .setColor(0x4f9d69)
+        .setColor(Colours.success)
         .setTitle("Business Added")
         .setDescription(
           `**${name}** has been created.${owner ? `\nThis business is owned by **${owner.username}**.` : ""}`,
@@ -49,14 +50,14 @@ module.exports = {
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
         const embed = new EmbedBuilder()
-          .setColor(0xd84654)
+          .setColor(Colours.error)
           .setTitle("Business Already Exists")
           .setDescription(`**${name}** already exists.`);
         return interaction.reply({ embeds: [embed] });
       }
 
       const embed = new EmbedBuilder()
-        .setColor(0xd84654)
+        .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription("Something went wrong with adding a business.");
       return interaction.reply({ embeds: [embed] });

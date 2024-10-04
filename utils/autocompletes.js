@@ -1,12 +1,47 @@
 const { Businesses, Employees } = require("./db");
 const { Op } = require("sequelize");
+const { Roles } = require("../../config");
 
-module.exports.autocompletes = {
+function hasPerms(user) {
+  const roleIds = Object.values(Roles);
+  return user.roles.cache.some((role) => roleIds.includes(role.id));
+}
+
+const autocompletes = {
   businesses: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
 
     try {
       // Fetch all business names from db
+      const businesses = await Businesses.findAll({
+        attributes: ["name", "id"],
+        where: {
+          name: {
+            [Op.like]: `${focusedValue}%`, // Filter by the user's input
+          },
+        },
+      });
+
+      const choices = businesses.map((business) => ({
+        name: business.name,
+        value: business.id.toString(),
+      }));
+
+      await interaction.respond(choices.slice(0, 25));
+    } catch (error) {
+      console.error("Error fetching businesses for autocomplete:", error);
+      await interaction.respond([]);
+    }
+  },
+  businessesAdminOnly: async (interaction) => {
+    const focusedValue = interaction.options.getFocused();
+
+    try {
+      // If the user is not an admin or mod, return no results
+      if (!hasPerms(interaction.member)) {
+        return interaction.respond([]);
+      }
+
       const businesses = await Businesses.findAll({
         attributes: ["name", "id"],
         where: {
@@ -38,9 +73,7 @@ module.exports.autocompletes = {
           name: {
             [Op.like]: `${focusedValue}%`, // Filter by the user's input
           },
-          ...(interaction.member.roles.cache.some(
-            (role) => role.name === ("Admin" || "Mod"),
-          )
+          ...(hasPerms(interaction.member)
             ? {}
             : { owner: interaction.user.id }),
         },
@@ -68,9 +101,7 @@ module.exports.autocompletes = {
           name: {
             [Op.like]: `${focusedValue}%`, // Filter by the user's input
           },
-          ...(interaction.member.roles.cache.some(
-            (role) => role.name === ("Admin" || "Mod"),
-          )
+          ...(hasPerms(interaction.member)
             ? {}
             : {
                 [Op.or]: [
@@ -101,4 +132,9 @@ module.exports.autocompletes = {
       await interaction.respond([]);
     }
   },
+};
+
+module.exports = {
+  autocompletes,
+  hasPerms,
 };

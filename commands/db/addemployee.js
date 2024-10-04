@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses, Employees } = require("../../utils/db");
 const { autocompletes } = require("../../utils/autocompletes");
+const { Colours } = require("../../utils/colours");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,7 +26,7 @@ module.exports = {
 
     if (isNaN(business)) {
       const embed = new EmbedBuilder()
-        .setColor(0xd84654)
+        .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription(`You do not own **${business}**.`);
       return interaction.reply({ embeds: [embed] });
@@ -47,7 +48,7 @@ module.exports = {
 
       if (employeeExists) {
         const embed = new EmbedBuilder()
-          .setColor(0xd84654)
+          .setColor(Colours.error)
           .setTitle("Employee Already Exists")
           .setDescription(
             `**${employee.username}** is already a member of **${businessName}**.`,
@@ -61,7 +62,7 @@ module.exports = {
       });
 
       const embed = new EmbedBuilder()
-        .setColor(0x4f9d69)
+        .setColor(Colours.success)
         .setTitle("Employee Added")
         .setDescription(
           `**${employee.username}** has been added to **${businessName}**.`,
@@ -69,7 +70,7 @@ module.exports = {
       await interaction.reply({ embeds: [embed] });
     } catch (error) {
       const embed = new EmbedBuilder()
-        .setColor(0xd84654)
+        .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription("Something went wrong with adding an employee.");
       return interaction.reply({ embeds: [embed] });

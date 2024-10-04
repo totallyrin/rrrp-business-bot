@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { autocompletes } = require("../../utils/autocompletes");
+const { Colours } = require("../../utils/colours");
 const { jobList } = require("../../config").Config;
 
 module.exports = {
@@ -78,7 +79,7 @@ module.exports = {
 
     if (isNaN(name)) {
       const embed = new EmbedBuilder()
-        .setColor(0xd84654)
+        .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription(`You do not own **${name}**.`);
       return interaction.reply({ embeds: [embed] });
@@ -96,7 +97,7 @@ module.exports = {
 
     if (affectedRows > 0) {
       const embed = new EmbedBuilder()
-        .setColor(0x4f9d69)
+        .setColor(Colours.success)
         .setTitle("Business Updated")
         .setDescription(
           `**${newname || businessName}** has been updated.\n\nChanges:
@@ -106,7 +107,7 @@ module.exports = {
     }
 
     const embed = new EmbedBuilder()
-      .setColor(0xd84654)
+      .setColor(Colours.error)
       .setTitle("An Error Occurred")
       .setDescription(`Could not find a business named **${businessName}**.`);
     return interaction.reply({ embeds: [embed] });
