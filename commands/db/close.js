@@ -30,25 +30,18 @@ module.exports = {
       })
     ).dataValues;
 
-    const affectedRows = await Businesses.update(
-      { last_opened: new Date() },
-      { where: { id: business } },
-    );
-
-    if (affectedRows > 0) {
-      const embed = new EmbedBuilder()
-        .setColor(0xd84654)
-        .setTitle("Closed for Business")
-        .setDescription(`**${businessName}** is now closed.`)
-        .setImage(image);
-      return interaction.reply({ embeds: [embed] });
-    }
-
     const embed = new EmbedBuilder()
       .setColor(0xd84654)
-      .setTitle("An Error Occurred")
-      .setDescription(`Could not find a business named **${businessName}**.`);
+      .setTitle("Closed for Business")
+      .setDescription(`**${businessName}** is now closed.`)
+      .setImage(image);
     return interaction.reply({ embeds: [embed] });
+
+    // const embed = new EmbedBuilder()
+    //   .setColor(0xd84654)
+    //   .setTitle("An Error Occurred")
+    //   .setDescription(`Could not find a business named **${businessName}**.`);
+    // return interaction.reply({ embeds: [embed] });
   },
   autocomplete: autocompletes.businessesEmployees,
 };
