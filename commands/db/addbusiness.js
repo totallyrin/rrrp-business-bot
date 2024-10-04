@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { Colours } = require("../../utils/colours");
 const { Channels } = require("../../config");
+const { hasPerms } = require("../../utils/autocompletes");
 const { jobList } = require("../../config").Config;
 
 module.exports = {
@@ -33,6 +34,14 @@ module.exports = {
     const name = interaction.options.getString("name");
     const type = interaction.options.getString("type");
     const owner = interaction.options.getUser("owner");
+
+    if (!hasPerms(interaction.member)) {
+      const embed = new EmbedBuilder()
+        .setColor(Colours.error)
+        .setTitle("Access Denied")
+        .setDescription("You do not have permission to use this command.");
+      return interaction.reply({ embeds: [embed], ephemeral: true });
+    }
 
     try {
       await Businesses.create({
