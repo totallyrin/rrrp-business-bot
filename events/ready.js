@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const { Businesses, Employees } = require("../utils/Businesses");
+const { Businesses, Employees } = require("../utils/db");
 
 const createdb = false;
 

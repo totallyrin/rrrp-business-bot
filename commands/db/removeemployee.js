@@ -4,7 +4,7 @@ const {
   ModalBuilder,
   TextInputBuilder,
 } = require("discord.js");
-const { Businesses, Employees } = require("../../utils/Businesses");
+const { Businesses, Employees } = require("../../utils/db");
 const { Op } = require("sequelize");
 const { jobList } = require("../../config").Config;
 

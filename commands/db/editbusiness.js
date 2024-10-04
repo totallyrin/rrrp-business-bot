@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { Businesses } = require("../../utils/Businesses");
+const { Businesses } = require("../../utils/db");
 const { Sequelize, Op } = require("sequelize");
 const { jobList } = require("../../config").Config;
 
