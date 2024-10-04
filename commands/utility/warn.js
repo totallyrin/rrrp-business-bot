@@ -23,16 +23,17 @@ module.exports = {
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription(`Could not find a business named **${businessName}**.`);
-      return interaction.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
     const {
       name: businessName,
+      type,
       owner,
       last_opened: dt,
     } = (
       await Businesses.findByPk(business, {
-        attributes: ["name", "owner", "last_opened"],
+        attributes: ["name", "type", "owner", "last_opened"],
       })
     ).dataValues;
 
@@ -49,7 +50,7 @@ module.exports = {
           .setDescription(
             `Could not find channel <#${Channels.warnings}> with ID **${Channels.warnings}**.`,
           );
-        return interaction.reply({ embeds: [embed] });
+        return interaction.reply({ embeds: [embed], ephemeral: true });
       }
     }
 
@@ -77,7 +78,26 @@ module.exports = {
       .setColor(Colours.success)
       .setTitle("Warning Issued")
       .setDescription(`Issued an inactivity warning for **${businessName}**.`);
-    return interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed], ephemeral: true });
+
+    channel = interaction.client.channels.cache.get(Channels.logs);
+
+    if (!channel) {
+      try {
+        channel = await interaction.client.channels.fetch(Channels.logs);
+      } catch (error) {
+        return console.error(`Error fetching channel: ${error}`);
+      }
+    }
+
+    const log = new EmbedBuilder()
+      .setColor(Colours.warning)
+      .setTitle("Warning Issued")
+      .setDescription(
+        `<@${interaction.member.id}> issued an inactivity warning for **${businessName}**.
+        - Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
+      );
+    return channel.send({ embeds: [log] });
   },
   autocomplete: autocompletes.businessesEmployees,
 };

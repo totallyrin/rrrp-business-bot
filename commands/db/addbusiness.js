@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { Colours } = require("../../utils/colours");
+const { Channels } = require("../../config");
 const { jobList } = require("../../config").Config;
 
 module.exports = {
@@ -44,23 +45,42 @@ module.exports = {
         .setColor(Colours.success)
         .setTitle("Business Added")
         .setDescription(
-          `**${name}** has been created.${owner ? `\nThis business is owned by **${owner.username}**.` : ""}`,
+          `**${name}** has been created.${owner ? `\nThis business is owned by <@${owner.id}>.` : ""}`,
         );
-      await interaction.reply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed], ephemeral: true });
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
         const embed = new EmbedBuilder()
           .setColor(Colours.error)
           .setTitle("Business Already Exists")
           .setDescription(`**${name}** already exists.`);
-        return interaction.reply({ embeds: [embed] });
+        return interaction.reply({ embeds: [embed], ephemeral: true });
       }
 
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription("Something went wrong with adding a business.");
-      return interaction.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed], ephemeral: true });
     }
+
+    let channel = interaction.client.channels.cache.get(Channels.logs);
+
+    if (!channel) {
+      try {
+        channel = await interaction.client.channels.fetch(Channels.logs);
+      } catch (error) {
+        return console.error(`Error fetching channel: ${error}`);
+      }
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(Colours.success)
+      .setTitle("Business Created")
+      .setDescription(
+        `<@${interaction.member.id}> added **${name}** to the database.
+        - Type: **${type}**${owner ? `\n- Owner: <@${owner.id}>` : ""}`,
+      );
+    return channel.send({ embeds: [embed] });
   },
 };

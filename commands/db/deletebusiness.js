@@ -23,7 +23,7 @@ module.exports = {
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription(`You do not have permission to use this command.`);
-      return interaction.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
     const {
@@ -43,7 +43,7 @@ module.exports = {
         .setColor(Colours.success)
         .setTitle("Business Deleted")
         .setDescription(`**${businessName}** was successfully deleted.`);
-      interaction.reply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed], ephemeral: true });
 
       let channel = interaction.client.channels.cache.get(Channels.logs);
 
@@ -69,7 +69,7 @@ module.exports = {
       .setColor(Colours.error)
       .setTitle("An Error Occurred")
       .setDescription(`Could not find a business named **${businessName}**.`);
-    return interaction.reply({ embeds: [embed] });
+    return interaction.reply({ embeds: [embed], ephemeral: true });
   },
   autocomplete: autocompletes.businessesAdminOnly,
 };

@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses, Employees } = require("../../utils/db");
 const { autocompletes } = require("../../utils/autocompletes");
 const { Colours } = require("../../utils/colours");
+const { Channels } = require("../../config");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -29,16 +30,16 @@ module.exports = {
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription(`You do not own **${business}**.`);
-      return interaction.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
-    try {
-      const businessName = (
-        await Businesses.findByPk(business, {
-          attributes: ["name"],
-        })
-      ).dataValues.name;
+    const businessName = (
+      await Businesses.findByPk(business, {
+        attributes: ["name"],
+      })
+    ).dataValues.name;
 
+    try {
       const rowCount = await Employees.destroy({
         where: {
           business_id: business,
@@ -53,7 +54,7 @@ module.exports = {
           .setDescription(
             `**${employee.username}** is not a member of **${businessName}**.`,
           );
-        return interaction.reply({ embeds: [embed] });
+        return interaction.reply({ embeds: [embed], ephemeral: true });
       }
 
       const embed = new EmbedBuilder()
@@ -62,14 +63,32 @@ module.exports = {
         .setDescription(
           `**${employee.username}** has been removed from **${businessName}**.`,
         );
-      await interaction.reply({ embeds: [embed] });
+      await interaction.reply({ embeds: [embed], ephemeral: true });
     } catch (error) {
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
         .setDescription("Something went wrong with removing an employee.");
-      return interaction.reply({ embeds: [embed] });
+      return interaction.reply({ embeds: [embed], ephemeral: true });
     }
+
+    let channel = interaction.client.channels.cache.get(Channels.logs);
+
+    if (!channel) {
+      try {
+        channel = await interaction.client.channels.fetch(Channels.logs);
+      } catch (error) {
+        return console.error(`Error fetching channel: ${error}`);
+      }
+    }
+
+    const embed = new EmbedBuilder()
+      .setColor(Colours.error)
+      .setTitle("Employee Removed")
+      .setDescription(
+        `<@${interaction.member.id}> removed <@${employee.id}> from **${businessName}**.`,
+      );
+    return channel.send({ embeds: [embed] });
   },
   autocomplete: autocompletes.businessesRestricted,
 };
