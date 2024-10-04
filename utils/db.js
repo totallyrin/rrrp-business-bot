@@ -27,11 +27,11 @@ const Businesses = sequelize.define("businesses", {
     allowNull: false,
   },
   open_image: {
-    type: Sequelize.BLOB,
+    type: Sequelize.STRING, // changed from BLOB to support URLs
     allowNull: true,
   },
   closed_image: {
-    type: Sequelize.BLOB,
+    type: Sequelize.STRING, // changed from BLOB to support URLs
     allowNull: true,
   },
 });

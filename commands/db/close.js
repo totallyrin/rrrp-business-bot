@@ -4,8 +4,8 @@ const { autocompletes } = require("../../utils/autocompletes");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("open")
-    .setDescription("Open your business")
+    .setName("close")
+    .setDescription("Close your business")
     .addStringOption((option) =>
       option
         .setName("business")
@@ -24,9 +24,9 @@ module.exports = {
       return interaction.reply({ embeds: [embed] });
     }
 
-    const { name: businessName, open_image: image } = (
+    const { name: businessName, closed_image: image } = (
       await Businesses.findByPk(business, {
-        attributes: ["name", "open_image"],
+        attributes: ["name", "closed_image"],
       })
     ).dataValues;
 
@@ -37,9 +37,9 @@ module.exports = {
 
     if (affectedRows > 0) {
       const embed = new EmbedBuilder()
-        .setColor(0x4f9d69)
-        .setTitle("Open for Business")
-        .setDescription(`**${businessName}** is now open!`)
+        .setColor(0xd84654)
+        .setTitle("Closed for Business")
+        .setDescription(`**${businessName}** is now closed.`)
         .setImage(image);
       return interaction.reply({ embeds: [embed] });
     }
