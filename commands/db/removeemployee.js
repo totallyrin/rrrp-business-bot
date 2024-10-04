@@ -36,14 +36,14 @@ module.exports = {
         })
       ).dataValues.name;
 
-      const employeeExists = await Employees.findOne({
+      const rowCount = await Employees.destroy({
         where: {
           business_id: business,
           userid: employee.id,
         },
       });
 
-      if (!employeeExists) {
+      if (!rowCount) {
         const embed = new EmbedBuilder()
           .setColor(0xd84654)
           .setTitle("Employee Does Not Exist")
@@ -52,13 +52,6 @@ module.exports = {
           );
         return interaction.reply({ embeds: [embed] });
       }
-
-      await Employees.destroy({
-        where: {
-          business_id: business,
-          userid: employee.id,
-        },
-      });
 
       const embed = new EmbedBuilder()
         .setColor(0x4f9d69)
