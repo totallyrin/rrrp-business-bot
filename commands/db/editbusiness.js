@@ -100,7 +100,7 @@ module.exports = {
         .setTitle("Business Updated")
         .setDescription(
           `**${newname || businessName}** has been updated.\n\nChanges:
-          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to **${owner.username}**\n` : ""}`,
+          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to **${newowner.username}**\n` : ""}`,
         );
       return interaction.reply({ embeds: [embed] });
     }
