@@ -1,6 +1,6 @@
 const { Businesses, Employees } = require("./db");
 const { Op } = require("sequelize");
-const { Roles } = require("../../config");
+const { Roles } = require("../config");
 
 function hasPerms(user) {
   const roleIds = Object.values(Roles);
