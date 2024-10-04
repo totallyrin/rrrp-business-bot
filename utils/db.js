@@ -8,7 +8,7 @@ const sequelize = new Sequelize("database", "user", "password", {
   storage: "database.sqlite",
 });
 
-module.exports.Businesses = sequelize.define("businesses", {
+const Businesses = sequelize.define("businesses", {
   name: {
     type: Sequelize.STRING,
     unique: true,
@@ -36,7 +36,7 @@ module.exports.Businesses = sequelize.define("businesses", {
   },
 });
 
-module.exports.Employees = sequelize.define("employees", {
+const Employees = sequelize.define("employees", {
   userid: {
     type: Sequelize.STRING,
     unique: false,
@@ -44,9 +44,19 @@ module.exports.Employees = sequelize.define("employees", {
   business_id: {
     type: Sequelize.INTEGER,
     references: {
-      model: "businesses",
+      model: Businesses,
       key: "id",
     },
     onDelete: "CASCADE",
   },
 });
+
+// link DB
+Businesses.hasMany(Employees, { foreignKey: "business_id" });
+Employees.belongsTo(Businesses, { foreignKey: "business_id" });
+
+// exports
+module.exports = {
+  Businesses,
+  Employees,
+};
