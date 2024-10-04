@@ -76,6 +76,14 @@ module.exports = {
     else if (type) data = { type: type };
     else if (owner) data = { owner: newowner ? newowner.id : undefined };
 
+    if (isNaN(name)) {
+      const embed = new EmbedBuilder()
+        .setColor(0xd84654)
+        .setTitle("An Error Occurred")
+        .setDescription(`You do not own **${name}**.`);
+      return interaction.reply({ embeds: [embed] });
+    }
+
     const businessName = (
       await Businesses.findByPk(name, {
         attributes: ["name"],
@@ -103,5 +111,5 @@ module.exports = {
       .setDescription(`Could not find a business named **${businessName}**.`);
     return interaction.reply({ embeds: [embed] });
   },
-  autocomplete: autocompletes.businesses,
+  autocomplete: autocompletes.businessesRestricted,
 };

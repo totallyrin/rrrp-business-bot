@@ -23,6 +23,14 @@ module.exports = {
     const business = interaction.options.getString("business");
     const employee = interaction.options.getUser("employee");
 
+    if (isNaN(business)) {
+      const embed = new EmbedBuilder()
+        .setColor(0xd84654)
+        .setTitle("An Error Occurred")
+        .setDescription(`You do not own **${business}**.`);
+      return interaction.reply({ embeds: [embed] });
+    }
+
     try {
       const businessName = (
         await Businesses.findByPk(business, {
@@ -67,5 +75,5 @@ module.exports = {
       return interaction.reply({ embeds: [embed] });
     }
   },
-  autocomplete: autocompletes.businesses,
+  autocomplete: autocompletes.businessesRestricted,
 };
