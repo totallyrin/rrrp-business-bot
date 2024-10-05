@@ -102,7 +102,7 @@ module.exports = {
         .setTitle("Business Updated")
         .setDescription(
           `**${newname || businessName}** has been updated.\n\nChanges:
-          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to **${newowner.username}**\n` : ""}`,
+          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to <@${newowner.id}>\n` : ""}`,
         );
       await interaction.reply({ embeds: [embed], ephemeral: true });
 
@@ -121,7 +121,7 @@ module.exports = {
         .setTitle("Business Updated")
         .setDescription(
           `<@${interaction.member.id}> updated **${businessName}**.\n\nChanges:
-          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to **${newowner.username}**\n` : ""}`,
+          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to <@${newowner.id}>\n` : ""}`,
         );
       return channel.send({ embeds: [log] });
     }
