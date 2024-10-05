@@ -10,6 +10,8 @@ Discord bot for keeping track of RRRP businesses.
   - Owners of a business can edit their business and add/remove images
   - Employees (and owner) can open and close a business
   - Specified roles can be given access to all commands
+- Channel-specific messaging
+- Logging
 
 # Commands
 - `/addbusiness [name] [type] [owner]*` - Creates a new business in the DB with given name, type, and optional owner (defaults to `NULL`)
@@ -47,3 +49,13 @@ GUILD_ID=
 4. Fill in roles and channels in `config.js`
 5. Register commands by running `node --env-file=.env deploy-commands.js`
 6. Start the bot by running `node --env-file=.env index.js`
+
+# Gallery
+
+### Automated warnings and seizure
+![image](https://github.com/user-attachments/assets/09c6d967-88cc-4e7b-b808-b8768a5eb2e8)
+### Open/close functionality
+![image](https://github.com/user-attachments/assets/27a8781b-bd11-4c7b-a715-4e67fa5dc5d2)
+![image](https://github.com/user-attachments/assets/93dbedfb-40fe-4be4-b2ff-61471f01553b)
+### Logging
+![image](https://github.com/user-attachments/assets/645085e0-2fba-467f-829e-f3604d81c482)
