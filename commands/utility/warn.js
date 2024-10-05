@@ -91,7 +91,7 @@ module.exports = {
             day: "numeric", // day of the month
           },
         )}**.
-        - You have **two days** to open your business through <#${Channels.marketplace}>.
+        - You have **24 hours** to open your business through <#${Channels.marketplace}>.
         - Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.
         - **This is the only warning you will receive for this matter.**`,
         );
