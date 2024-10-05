@@ -31,10 +31,6 @@ module.exports = {
         .setRequired(false),
     ),
   async execute(interaction) {
-    const name = interaction.options.getString("name");
-    const type = interaction.options.getString("type");
-    const owner = interaction.options.getUser("owner");
-
     if (!hasPerms(interaction.member)) {
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
@@ -42,6 +38,10 @@ module.exports = {
         .setDescription("You do not have permission to use this command.");
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
+
+    const name = interaction.options.getString("name");
+    const type = interaction.options.getString("type");
+    const owner = interaction.options.getUser("owner");
 
     try {
       await Businesses.create({

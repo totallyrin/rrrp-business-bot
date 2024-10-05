@@ -52,7 +52,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
-        .setDescription(`You do not own **${name}**.`);
+        .setDescription(`Could not find your business named **${name}**.`);
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
