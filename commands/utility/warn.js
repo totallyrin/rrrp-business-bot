@@ -59,7 +59,6 @@ module.exports = {
         { warned: true },
         { where: { id: business } },
       );
-      await Employees.destroy({ where: { business_id: business } });
 
       if (!affectedRows) {
         const embed = new EmbedBuilder()

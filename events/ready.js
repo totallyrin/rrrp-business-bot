@@ -1,5 +1,6 @@
 const { Events } = require("discord.js");
 const { Businesses, Employees } = require("../utils/db");
+const { startTimer } = require("../utils/timer");
 
 const createdb = false;
 
@@ -13,5 +14,8 @@ module.exports = {
       });
     });
     console.log(`Ready! Logged in as ${client.user.tag}`);
+    startTimer(client)
+      .then(() => console.log("Timer started"))
+      .catch((error) => console.error(error));
   },
 };
