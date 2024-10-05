@@ -17,15 +17,15 @@ module.exports.Config = {
 };
 
 module.exports.Roles = {
-  Admin: "1291785100228558909",
-  Mod: "1291858368029266052",
+  Admin: "",
+  Mod: "",
 };
 
 module.exports.Channels = {
-  logs: "1291477637486612604",
-  marketplace: "1291888470351941693",
-  warnings: "1291848393555054692",
-  closures: "1291848393555054692",
-  openings: "1291848725454520410",
-  rules: "1119449807199674398",
+  logs: "",
+  marketplace: "",
+  warnings: "",
+  closures: "",
+  openings: "",
+  rules: "",
 };
