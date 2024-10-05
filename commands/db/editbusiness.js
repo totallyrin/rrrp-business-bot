@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
-const { autocompletes } = require("../../utils/autocompletes");
+const { autocompletes, hasPerms } = require("../../utils/autocompletes");
 const { Colours } = require("../../utils/colours");
 const { Channels } = require("../../config");
-const { jobList } = require("../../config").Config;
+// const { jobList } = require("../../config").Config;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -27,27 +27,28 @@ module.exports = {
             .setRequired(true),
         ),
     )
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("type")
-        .setDescription("Update the type of the business")
-        .addStringOption((option) =>
-          option
-            .setName("name")
-            .setDescription("The name of the business")
-            .setRequired(true)
-            .setAutocomplete(true),
-        )
-        .addStringOption((option) =>
-          option
-            .setName("type")
-            .setDescription("The new type of business")
-            .setRequired(true)
-            .addChoices(
-              ...jobList.map((job) => ({ name: job.name, value: job.value })),
-            ),
-        ),
-    )
+    // rm changing business type, user should create a new business instead
+    // .addSubcommand((subcommand) =>
+    //   subcommand
+    //     .setName("type")
+    //     .setDescription("Update the type of the business")
+    //     .addStringOption((option) =>
+    //       option
+    //         .setName("name")
+    //         .setDescription("The name of the business")
+    //         .setRequired(true)
+    //         .setAutocomplete(true),
+    //     )
+    //     .addStringOption((option) =>
+    //       option
+    //         .setName("type")
+    //         .setDescription("The new type of business")
+    //         .setRequired(true)
+    //         .addChoices(
+    //           ...jobList.map((job) => ({ name: job.name, value: job.value })),
+    //         ),
+    //     ),
+    // )
     .addSubcommand((subcommand) =>
       subcommand
         .setName("owner")
@@ -86,11 +87,19 @@ module.exports = {
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
-    const businessName = (
+    const { name: businessName, owner: trueowner } = (
       await Businesses.findByPk(name, {
-        attributes: ["name"],
+        attributes: ["name", "owner"],
       })
     ).dataValues.name;
+
+    if (trueowner !== interaction.member.id && !hasPerms(interaction.member)) {
+      const embed = new EmbedBuilder()
+        .setColor(Colours.error)
+        .setTitle("Access Denied")
+        .setDescription("You do not have permission to use this command.");
+      return interaction.reply({ embeds: [embed], ephemeral: true });
+    }
 
     const affectedRows = await Businesses.update(data, {
       where: { id: name },

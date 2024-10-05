@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses, Employees } = require("../../utils/db");
-const { autocompletes } = require("../../utils/autocompletes");
+const { autocompletes, hasPerms } = require("../../utils/autocompletes");
 const { Colours } = require("../../utils/colours");
 const { Channels } = require("../../config");
 
@@ -33,11 +33,19 @@ module.exports = {
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
-    const businessName = (
+    const { name: businessName, owner } = (
       await Businesses.findByPk(business, {
-        attributes: ["name"],
+        attributes: ["name", "owner"],
       })
     ).dataValues.name;
+
+    if (owner !== interaction.member.id && !hasPerms(interaction.member)) {
+      const embed = new EmbedBuilder()
+        .setColor(Colours.error)
+        .setTitle("Access Denied")
+        .setDescription("You do not have permission to use this command.");
+      return interaction.reply({ embeds: [embed], ephemeral: true });
+    }
 
     try {
       const employeeExists = await Employees.findOne({
