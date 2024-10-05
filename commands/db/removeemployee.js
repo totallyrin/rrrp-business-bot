@@ -52,7 +52,7 @@ module.exports = {
           .setColor(Colours.error)
           .setTitle("Employee Does Not Exist")
           .setDescription(
-            `**${employee.username}** is not a member of **${businessName}**.`,
+            `<@${employee.id}> is not a member of **${businessName}**.`,
           );
         return interaction.reply({ embeds: [embed], ephemeral: true });
       }
@@ -61,7 +61,7 @@ module.exports = {
         .setColor(Colours.success)
         .setTitle("Employee Removed")
         .setDescription(
-          `**${employee.username}** has been removed from **${businessName}**.`,
+          `<@${employee.id}> has been removed from **${businessName}**.`,
         );
       await interaction.reply({ embeds: [embed], ephemeral: true });
     } catch (error) {

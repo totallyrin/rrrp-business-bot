@@ -21,7 +21,7 @@ module.exports = {
     if (isNaN(business)) {
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
-        .setTitle("An Error Occurred")
+        .setTitle("Access Denied")
         .setDescription(`You do not have permission to use this command.`);
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }

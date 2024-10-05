@@ -6,8 +6,8 @@ const { Channels } = require("../../config");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("warn")
-    .setDescription("Issue an inactivity warning to a business owner")
+    .setName("seize")
+    .setDescription("Seize a business (remove owner and employees)")
     .addStringOption((option) =>
       option
         .setName("business")
@@ -37,18 +37,18 @@ module.exports = {
       })
     ).dataValues;
 
-    let channel = interaction.client.channels.cache.get(Channels.warnings);
+    let channel = interaction.client.channels.cache.get(Channels.closures);
 
     if (!channel) {
       try {
-        channel = await interaction.client.channels.fetch(Channels.warnings);
+        channel = await interaction.client.channels.fetch(Channels.closures);
       } catch (error) {
         console.error(`Error fetching channel: ${error}`);
         const embed = new EmbedBuilder()
           .setColor(Colours.error)
           .setTitle("An Error Occurred")
           .setDescription(
-            `Could not find channel <#${Channels.warnings}> with ID **${Channels.warnings}**.`,
+            `Could not find channel <#${Channels.closures}> with ID **${Channels.closures}**.`,
           );
         return interaction.reply({ embeds: [embed], ephemeral: true });
       }
@@ -56,7 +56,7 @@ module.exports = {
 
     try {
       const affectedRows = await Businesses.update(
-        { warned: true },
+        { owner: null, warned: false },
         { where: { id: business } },
       );
       await Employees.destroy({ where: { business_id: business } });
@@ -73,10 +73,10 @@ module.exports = {
 
       const warning = new EmbedBuilder()
         .setColor(Colours.warning_light)
-        .setTitle("Inactivity Warning")
+        .setTitle("Business Seized")
         .setDescription(
           `## ${businessName} ##
-        - Your business has been **inactive** since **${dt.toLocaleDateString(
+        - This business has been **inactive** since **${dt.toLocaleDateString(
           "en-US",
           {
             // year: "numeric",
@@ -84,19 +84,15 @@ module.exports = {
             day: "numeric", // day of the month
           },
         )}**.
-        - You have **two days** to open your business through <#${Channels.marketplace}>.
-        - Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.
-        - **This is the only warning you will receive for this matter.**`,
+        - As a result, **it has been seized**, per <#${Channels.rules}>.`,
         );
 
       await channel.send({ content: `<@${owner}>`, embeds: [warning] });
 
       const embed = new EmbedBuilder()
         .setColor(Colours.success)
-        .setTitle("Warning Issued")
-        .setDescription(
-          `Issued an inactivity warning for **${businessName}**.`,
-        );
+        .setTitle("Business Seized")
+        .setDescription(`Seized **${businessName}**.`);
       await interaction.reply({ embeds: [embed], ephemeral: true });
 
       channel = interaction.client.channels.cache.get(Channels.logs);
@@ -111,9 +107,9 @@ module.exports = {
 
       const log = new EmbedBuilder()
         .setColor(Colours.warning)
-        .setTitle("Warning Issued")
+        .setTitle("Business Seized")
         .setDescription(
-          `<@${interaction.member.id}> issued an inactivity warning for **${businessName}**.
+          `<@${interaction.member.id}> seized **${businessName}**.
         - Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
         );
       return channel.send({ embeds: [log] });
@@ -122,7 +118,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
-        .setDescription("Something went wrong with issuing a warning.");
+        .setDescription("Something went wrong with seizing a business.");
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
   },

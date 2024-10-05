@@ -52,7 +52,7 @@ module.exports = {
           .setColor(Colours.error)
           .setTitle("Employee Already Exists")
           .setDescription(
-            `**${employee.username}** is already a member of **${businessName}**.`,
+            `<@${employee.id}> is already a member of **${businessName}**.`,
           );
         return interaction.reply({ embeds: [embed], ephemeral: true });
       }
@@ -66,7 +66,7 @@ module.exports = {
         .setColor(Colours.success)
         .setTitle("Employee Added")
         .setDescription(
-          `**${employee.username}** has been added to **${businessName}**.`,
+          `<@${employee.id}> has been added to **${businessName}**.`,
         );
       await interaction.reply({ embeds: [embed], ephemeral: true });
     } catch (error) {

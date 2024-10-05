@@ -26,6 +26,11 @@ const Businesses = sequelize.define("businesses", {
     defaultValue: Sequelize.NOW,
     allowNull: false,
   },
+  warned: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
   open_image: {
     type: Sequelize.STRING, // changed from BLOB to support URLs
     allowNull: true,
