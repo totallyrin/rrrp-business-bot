@@ -75,6 +75,7 @@ module.exports = {
 
     const embed2 = new EmbedBuilder()
       .setColor(Colours.success)
+      .setTitle("Business Closed")
       .setDescription(`**${businessName}** is now closed.\n- ${message.url}`);
     return interaction.reply({ embeds: [embed2], ephemeral: true });
   },
