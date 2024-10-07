@@ -99,7 +99,7 @@ module.exports = {
       .setColor(Colours.success)
       .setTitle("Employee Added")
       .setDescription(
-        `<@${interaction.member.id}> added <@${employee.id}> to the **${businessName}**.`,
+        `<@${interaction.member.id}> added <@${employee.id}> to **${businessName}**.`,
       );
     return channel.send({ embeds: [embed] });
   },

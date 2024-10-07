@@ -67,8 +67,7 @@ module.exports = {
         .setColor(Colours.error)
         .setTitle("Business Deleted")
         .setDescription(
-          `<@${interaction.member.id}> deleted **${businessName}** from the database.
-        - Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
+          `<@${interaction.member.id}> deleted **${businessName}** from the database.\n- Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
         );
       return channel.send({ embeds: [log] });
     }

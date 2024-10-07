@@ -83,16 +83,14 @@ module.exports = {
         .setColor(Colours.warning_light)
         .setTitle("Business Seized")
         .setDescription(
-          `## ${businessName} ##
-        - This business has been **inactive** since **${dt.toLocaleDateString(
-          "en-US",
-          {
-            // year: "numeric",
-            month: "long", // full month name
-            day: "numeric", // day of the month
-          },
-        )}**.
-        - As a result, **it has been seized**, per <#${Channels.rules}>.`,
+          `## ${businessName} ##\n- This business has been **inactive** since **${dt.toLocaleDateString(
+            "en-US",
+            {
+              // year: "numeric",
+              month: "long", // full month name
+              day: "numeric", // day of the month
+            },
+          )}**.\n- As a result, **it has been seized**, per <#${Channels.rules}>.`,
         );
 
       await channel.send({ content: `<@${owner}>`, embeds: [warning] });
@@ -117,8 +115,7 @@ module.exports = {
         .setColor(Colours.warning)
         .setTitle("Business Seized")
         .setDescription(
-          `<@${interaction.member.id}> seized **${businessName}**.
-        - Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
+          `<@${interaction.member.id}> seized **${businessName}**.\n- Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
         );
       return channel.send({ embeds: [log] });
     } catch (error) {

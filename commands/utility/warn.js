@@ -82,18 +82,14 @@ module.exports = {
         .setColor(Colours.warning_light)
         .setTitle("Inactivity Warning")
         .setDescription(
-          `## ${businessName} ##
-        - Your business has been **inactive** since **${dt.toLocaleDateString(
-          "en-US",
-          {
-            // year: "numeric",
-            month: "long", // full month name
-            day: "numeric", // day of the month
-          },
-        )}**.
-        - You have **24 hours** to open your business through <#${Channels.marketplace}>.
-        - Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.
-        - **This is the only warning you will receive for this matter.**`,
+          `## ${businessName} ##\n- Your business has been **inactive** since **${dt.toLocaleDateString(
+            "en-US",
+            {
+              // year: "numeric",
+              month: "long", // full month name
+              day: "numeric", // day of the month
+            },
+          )}**.\n- You have **24 hours** to open your business through <#${Channels.marketplace}>.\n- Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.\n- **This is the only warning you will receive for this matter.**`,
         );
 
       await channel.send({ content: `<@${owner}>`, embeds: [warning] });
@@ -120,8 +116,7 @@ module.exports = {
         .setColor(Colours.warning)
         .setTitle("Warning Issued")
         .setDescription(
-          `<@${interaction.member.id}> issued an inactivity warning for **${businessName}**.
-        - Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
+          `<@${interaction.member.id}> issued an inactivity warning for **${businessName}**.\n- Type: **${type}**${owner ? `\n- Owner: <@${owner}>` : ""}`,
         );
       return channel.send({ embeds: [log] });
     } catch (error) {

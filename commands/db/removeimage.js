@@ -109,8 +109,7 @@ module.exports = {
         .setDescription(
           `<@${interaction.member.id}> removed ${
             subcommand === "both" ? "all images" : "an image"
-          } from **${businessName}**.
-          ${subcommand === "both" ? "" : "- Type: **" + subcommand + "_image**"}`,
+          } from **${businessName}**.${subcommand === "both" ? "" : "\n- Type: **" + subcommand + "_image**"}`,
         )
         .setImage(
           subcommand === "closed"

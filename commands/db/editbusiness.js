@@ -110,8 +110,7 @@ module.exports = {
         .setColor(Colours.success)
         .setTitle("Business Updated")
         .setDescription(
-          `**${newname || businessName}** has been updated.\n\nChanges:
-          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to <@${newowner.id}>\n` : ""}`,
+          `**${newname || businessName}** has been updated.\n\nChanges:${newname ? `\n- **${businessName}** has been renamed to **${newname}**` : ""}${type ? `\n- Type was changed to **${type}**` : ""}${newowner ? `\n- Ownership transferred to <@${newowner.id}>` : ""}`,
         );
       await interaction.reply({ embeds: [embed], ephemeral: true });
 

@@ -87,8 +87,7 @@ module.exports = {
       .setColor(Colours.success)
       .setTitle("Business Created")
       .setDescription(
-        `<@${interaction.member.id}> added **${name}** to the database.
-        - Type: **${type}**${owner ? `\n- Owner: <@${owner.id}>` : ""}`,
+        `<@${interaction.member.id}> added **${name}** to the database.\n- Type: **${type}**${owner ? `\n- Owner: <@${owner.id}>` : ""}`,
       );
     return channel.send({ embeds: [embed] });
   },

@@ -103,8 +103,7 @@ module.exports = {
         .setColor(Colours.success)
         .setTitle("Image Added")
         .setDescription(
-          `<@${interaction.member.id}> added an image to **${businessName}**.
-          - Type: **${subcommand}_image**`,
+          `<@${interaction.member.id}> added an image to **${businessName}**.\n- Type: **${subcommand}_image**`,
         )
         .setImage(image);
       return channel.send({ embeds: [log] });
