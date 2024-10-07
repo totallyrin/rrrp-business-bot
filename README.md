@@ -23,7 +23,7 @@ Discord bot for keeping track of RRRP businesses.
 - `/removeemployee [business] [employee]` - Removes a user from a business
 - `/addimage`
   - `/addimage open [name] [image]` - Adds an 'open' image to a business
-  - `/addImage closed [name] [image]` - Adds a 'closed' image to a business
+  - `/addimage closed [name] [image]` - Adds a 'closed' image to a business
 - `/removeimage`
   - `/removeimage open [name]` - Removes a business' 'open' image
   - `/removeimage closed [name]` - Removes a business' 'closed' image
