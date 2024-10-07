@@ -125,7 +125,7 @@ module.exports = {
       }
 
       const log = new EmbedBuilder()
-        .setColor(Colours.warning)
+        .setColor(Colours.neutral)
         .setTitle("Business Updated")
         .setDescription(
           `<@${interaction.member.id}> updated **${businessName}**.\n\nChanges:${newname ? `\n- **${businessName}** has been renamed to **${newname}**` : ""}${type ? `\n- Type was changed to **${type}**` : ""}${newowner ? `\n- Ownership transferred to <@${newowner.id}>` : ""}`,
