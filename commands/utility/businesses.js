@@ -26,7 +26,6 @@ module.exports = {
         const endIndex = Math.min(startIndex + itemsPerPage, businesses.length);
         const currentBusinesses = businesses.slice(startIndex, endIndex);
 
-        // Create a table-like string for the description
         const description =
           currentBusinesses
             .map((business) => {
@@ -50,7 +49,7 @@ module.exports = {
           .setCustomId("previous")
           .setLabel("Previous")
           .setStyle(ButtonStyle.Primary)
-          .setDisabled(currentPage === 0); // Disable if on the first page
+          .setDisabled(currentPage === 0);
 
         const nextButton = new ButtonBuilder()
           .setCustomId("next")
@@ -58,7 +57,7 @@ module.exports = {
           .setStyle(ButtonStyle.Primary)
           .setDisabled(
             currentPage >= Math.ceil(businesses.length / itemsPerPage) - 1,
-          ); // Disable if on the last page
+          );
 
         row.addComponents(previousButton, nextButton);
         return row;
@@ -91,7 +90,6 @@ module.exports = {
       });
 
       collector.on("end", async () => {
-        // Disable buttons after the collector ends
         const finalRow = createButtons();
         finalRow.components.forEach((button) => button.setDisabled(true));
         await message.edit({ components: [finalRow] });
