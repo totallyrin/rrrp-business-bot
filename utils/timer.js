@@ -13,6 +13,7 @@ module.exports = {
         where: {
           last_opened: {
             [Op.lt]: new Date(new Date() - 14 * 24 * 60 * 60 * 1000), // check 14 days ago
+            // [Op.lt]: new Date(new Date() - 5 * 1000), // check 5 minutes
           },
           owner: {
             [Op.ne]: null,
@@ -45,16 +46,14 @@ module.exports = {
               .setColor(Colours.warning_light)
               .setTitle("Business Seized")
               .setDescription(
-                `## ${business.dataValues.name} ##
-        - This business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
-          "en-US",
-          {
-            // year: "numeric",
-            month: "long", // full month name
-            day: "numeric", // day of the month
-          },
-        )}**.
-        - As a result, **it has been seized**, per <#${Channels.rules}>.`,
+                `## ${business.dataValues.name} ##\n- This business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
+                  "en-US",
+                  {
+                    // year: "numeric",
+                    month: "long", // full month name
+                    day: "numeric", // day of the month
+                  },
+                )}**.\n- As a result, **it has been seized**, per <#${Channels.rules}>.`,
               );
             await channel.send({
               content: `<@${business.dataValues.owner}>`,
@@ -75,8 +74,7 @@ module.exports = {
               .setColor(Colours.warning)
               .setTitle("Business Seized")
               .setDescription(
-                `<@${process.env.CLIENT_ID}> seized **${business.dataValues.name}**.
-        - Type: **${business.dataValues.type}**${business.dataValues.owner ? `\n- Owner: <@${business.dataValues.owner}>` : ""}`,
+                `<@${process.env.CLIENT_ID}> seized **${business.dataValues.name}**.\n- Type: **${business.dataValues.type}**${business.dataValues.owner ? `\n- Owner: <@${business.dataValues.owner}>` : ""}`,
               );
             return channel.send({ embeds: [log] });
           } catch (error) {
@@ -104,18 +102,14 @@ module.exports = {
               .setColor(Colours.warning_light)
               .setTitle("Inactivity Warning")
               .setDescription(
-                `## ${business.dataValues.name} ##
-        - Your business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
-          "en-US",
-          {
-            // year: "numeric",
-            month: "long", // full month name
-            day: "numeric", // day of the month
-          },
-        )}**.
-        - You have **24 hours** to open your business through <#${Channels.marketplace}>.
-        - Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.
-        - **This is the only warning you will receive for this matter.**`,
+                `## ${business.dataValues.name} ##\n- Your business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
+                  "en-US",
+                  {
+                    // year: "numeric",
+                    month: "long", // full month name
+                    day: "numeric", // day of the month
+                  },
+                )}**.\n- You have **24 hours** to open your business through <#${Channels.marketplace}>.\n- Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.\n- **This is the only warning you will receive for this matter.**`,
               );
             await channel.send({
               content: `<@${business.dataValues.owner}>`,
@@ -135,8 +129,7 @@ module.exports = {
               .setColor(Colours.warning)
               .setTitle("Warning Issued")
               .setDescription(
-                `<@${process.env.client_id}> issued an inactivity warning for **${business.dataValues.name}**.
-                - Type: **${business.dataValues.type}**${business.dataValues.owner ? `\n- Owner: <@${business.dataValues.owner}>` : ""}`,
+                `<@${process.env.client_id}> issued an inactivity warning for **${business.dataValues.name}**.\n- Type: **${business.dataValues.type}**${business.dataValues.owner ? `\n- Owner: <@${business.dataValues.owner}>` : ""}`,
               );
             return channel.send({ embeds: [log] });
           } catch (error) {

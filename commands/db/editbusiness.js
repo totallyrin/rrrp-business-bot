@@ -128,8 +128,7 @@ module.exports = {
         .setColor(Colours.warning)
         .setTitle("Business Updated")
         .setDescription(
-          `<@${interaction.member.id}> updated **${businessName}**.\n\nChanges:
-          ${newname ? `- **${businessName}** has been renamed to **${newname}**\n` : ""}${type ? `- Type was changed to **${type}**\n` : ""}${newowner ? `- Ownership transferred to <@${newowner.id}>\n` : ""}`,
+          `<@${interaction.member.id}> updated **${businessName}**.\n\nChanges:${newname ? `\n- **${businessName}** has been renamed to **${newname}**` : ""}${type ? `\n- Type was changed to **${type}**` : ""}${newowner ? `\n- Ownership transferred to <@${newowner.id}>` : ""}`,
         );
       return channel.send({ embeds: [log] });
     }

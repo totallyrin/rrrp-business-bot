@@ -83,10 +83,7 @@ module.exports = {
 
       const embed2 = new EmbedBuilder()
         .setColor(Colours.success)
-        .setDescription(
-          `**${businessName}** is now open!
-          - ${message.url}`,
-        );
+        .setDescription(`**${businessName}** is now open!\n- ${message.url}`);
       return interaction.reply({ embeds: [embed2], ephemeral: true });
     }
 

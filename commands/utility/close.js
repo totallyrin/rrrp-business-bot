@@ -73,10 +73,9 @@ module.exports = {
       .setImage(image);
     const message = await channel.send({ embeds: [embed] });
 
-    const embed2 = new EmbedBuilder().setColor(Colours.success).setDescription(
-      `**${businessName}** is now closed.
-      - ${message.url}`,
-    );
+    const embed2 = new EmbedBuilder()
+      .setColor(Colours.success)
+      .setDescription(`**${businessName}** is now closed.\n- ${message.url}`);
     return interaction.reply({ embeds: [embed2], ephemeral: true });
   },
   autocomplete: autocompletes.businessesEmployees,
