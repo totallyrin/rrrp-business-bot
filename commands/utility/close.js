@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { Businesses } = require("../../utils/db");
-const { autocompletes } = require("../../utils/autocompletes");
+const { Businesses, Employees } = require("../../utils/db");
+const { autocompletes, hasPerms } = require("../../utils/autocompletes");
 const { Colours } = require("../../utils/colours");
 const { Channels } = require("../../config");
 
@@ -22,15 +22,39 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setColor(Colours.error)
         .setTitle("An Error Occurred")
-        .setDescription(`You are not an employee of **${business}**.`);
+        .setDescription(`Could not find your business named **${business}**.`);
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
-    const { name: businessName, closed_image: image } = (
+    const {
+      name: businessName,
+      owner,
+      closed_image: image,
+    } = (
       await Businesses.findByPk(business, {
-        attributes: ["name", "closed_image"],
+        attributes: ["name", "owner", "closed_image"],
       })
     ).dataValues;
+
+    const employees = (
+      await Employees.findAll({
+        where: {
+          business_id: business,
+        },
+      })
+    ).map((employee) => employee.dataValues.userid);
+
+    if (
+      owner !== interaction.member.id &&
+      !hasPerms(interaction.member) &&
+      !employees.includes(interaction.user.id)
+    ) {
+      const embed = new EmbedBuilder()
+        .setColor(Colours.error)
+        .setTitle("Access Denied")
+        .setDescription("You do not have permission to use this command.");
+      return interaction.reply({ embeds: [embed], ephemeral: true });
+    }
 
     let channel = interaction.client.channels.cache.get(Channels.marketplace);
 

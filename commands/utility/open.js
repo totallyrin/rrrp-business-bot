@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { Businesses } = require("../../utils/db");
-const { autocompletes } = require("../../utils/autocompletes");
+const { Businesses, Employees } = require("../../utils/db");
+const { autocompletes, hasPerms } = require("../../utils/autocompletes");
 const { Colours } = require("../../utils/colours");
 const { Channels } = require("../../config");
 
@@ -26,11 +26,35 @@ module.exports = {
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 
-    const { name: businessName, open_image: image } = (
+    const {
+      name: businessName,
+      owner,
+      open_image: image,
+    } = (
       await Businesses.findByPk(business, {
-        attributes: ["name", "open_image"],
+        attributes: ["name", "owner", "open_image"],
       })
     ).dataValues;
+
+    const employees = (
+      await Employees.findAll({
+        where: {
+          business_id: business,
+        },
+      })
+    ).map((employee) => employee.dataValues.userid);
+
+    if (
+      owner !== interaction.member.id &&
+      !hasPerms(interaction.member) &&
+      !employees.includes(interaction.user.id)
+    ) {
+      const embed = new EmbedBuilder()
+        .setColor(Colours.error)
+        .setTitle("Access Denied")
+        .setDescription("You do not have permission to use this command.");
+      return interaction.reply({ embeds: [embed], ephemeral: true });
+    }
 
     const affectedRows = await Businesses.update(
       { last_opened: new Date() },
