@@ -1,15 +1,14 @@
 const { Events } = require("discord.js");
 const { Businesses, Employees } = require("../utils/db");
 const { startTimer } = require("../utils/timer");
-
-const createdb = false;
+const { CreateDB } = require("../config");
 
 module.exports = {
   name: Events.ClientReady,
   once: true,
   execute(client) {
-    Businesses.sync({ force: createdb }).then(async () => {
-      Employees.sync({ force: createdb }).then(async () => {
+    Businesses.sync({ force: CreateDB }).then(async () => {
+      Employees.sync({ force: CreateDB }).then(async () => {
         console.log("Database synced");
       });
     });

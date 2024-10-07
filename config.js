@@ -1,4 +1,7 @@
 // config file
+
+module.exports.CreateDB = true;
+
 module.exports.Config = {
   // commented out gov. jobs
   jobList: [
