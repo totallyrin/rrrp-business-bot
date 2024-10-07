@@ -61,7 +61,7 @@ module.exports = {
       await Businesses.findByPk(name, {
         attributes: ["name", "owner"],
       })
-    ).dataValues.name;
+    ).dataValues;
 
     if (owner !== interaction.member.id && !hasPerms(interaction.member)) {
       const embed = new EmbedBuilder()
