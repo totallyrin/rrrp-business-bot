@@ -3,7 +3,7 @@ const { Businesses, Employees } = require("./db");
 const { Op } = require("sequelize");
 const { EmbedBuilder } = require("discord.js");
 const { Colours } = require("./colours");
-const { Channels } = require("../config");
+const { Channels, WarningDays } = require("../config");
 
 module.exports = {
   async startTimer(client) {
@@ -13,7 +13,6 @@ module.exports = {
         where: {
           last_opened: {
             [Op.lt]: new Date(new Date() - 14 * 24 * 60 * 60 * 1000), // check 14 days ago
-            // [Op.lt]: new Date(new Date() - 5 * 1000), // check 5 minutes
           },
           owner: {
             [Op.ne]: null,
@@ -23,7 +22,7 @@ module.exports = {
 
       for (const business of businesses) {
         // if warned, seize business, else issue warning
-        if (business.dataValues.warned) {
+        if (business.dataValues.warned >= WarningDays) {
           // seize
           let channel = client.channels.cache.get(Channels.closures);
 
@@ -37,16 +36,18 @@ module.exports = {
 
           try {
             await Businesses.update(
-              { owner: null, warned: false },
+              { owner: null, warned: 0 },
               { where: { id: business.dataValues.id } },
             );
-            await Employees.destroy({ where: { business_id: business } });
+            await Employees.destroy({
+              where: { business_id: business.dataValues.id },
+            });
 
             const warning = new EmbedBuilder()
               .setColor(Colours.warning_light)
               .setTitle("Business Seized")
               .setDescription(
-                `## ${business.dataValues.name} ##\n- This business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
+                `### ${business.dataValues.name} ###\n- This business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
                   "en-US",
                   {
                     // year: "numeric",
@@ -80,8 +81,8 @@ module.exports = {
           } catch (error) {
             console.error(error);
           }
-        } else {
-          // warn
+        } else if (business.dataValues.warned === 0) {
+          // warn if not warned before
           let channel = client.channels.cache.get(Channels.warnings);
 
           if (!channel) {
@@ -94,7 +95,7 @@ module.exports = {
 
           try {
             await Businesses.update(
-              { warned: true },
+              { warned: business.dataValues.warned + 1 },
               { where: { id: business.dataValues.id } },
             );
 
@@ -102,14 +103,14 @@ module.exports = {
               .setColor(Colours.warning_light)
               .setTitle("Inactivity Warning")
               .setDescription(
-                `## ${business.dataValues.name} ##\n- Your business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
+                `### ${business.dataValues.name} ###\n- Your business has been **inactive** since **${business.dataValues.last_opened.toLocaleDateString(
                   "en-US",
                   {
                     // year: "numeric",
                     month: "long", // full month name
                     day: "numeric", // day of the month
                   },
-                )}**.\n- You have **24 hours** to open your business through <#${Channels.marketplace}>.\n- Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.\n- **This is the only warning you will receive for this matter.**`,
+                )}**.\n- You have **${WarningDays > 1 ? `${WarningDays} days` : "24 hours"}** to open your business through <#${Channels.marketplace}>.\n- Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.\n- **This is the only warning you will receive for this matter.**`,
               );
             await channel.send({
               content: `<@${business.dataValues.owner}>`,
@@ -135,6 +136,12 @@ module.exports = {
           } catch (error) {
             console.error(error);
           }
+        } else {
+          // increment warning
+          await Businesses.update(
+            { warned: business.dataValues.warned + 1 },
+            { where: { id: business.dataValues.id } },
+          );
         }
       }
     });

@@ -27,8 +27,8 @@ const Businesses = sequelize.define("businesses", {
     allowNull: false,
   },
   warned: {
-    type: Sequelize.BOOLEAN,
-    defaultValue: false,
+    type: Sequelize.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   open_image: {

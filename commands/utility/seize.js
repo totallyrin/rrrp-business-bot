@@ -83,7 +83,7 @@ module.exports = {
         .setColor(Colours.warning_light)
         .setTitle("Business Seized")
         .setDescription(
-          `## ${businessName} ##\n- This business has been **inactive** since **${dt.toLocaleDateString(
+          `### ${businessName} ###\n- This business has been **inactive** since **${dt.toLocaleDateString(
             "en-US",
             {
               // year: "numeric",

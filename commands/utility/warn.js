@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { autocompletes, hasPerms } = require("../../utils/autocompletes");
 const { Colours } = require("../../utils/colours");
-const { Channels } = require("../../config");
+const { Channels, WarningDays } = require("../../config");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -38,10 +38,11 @@ module.exports = {
       name: businessName,
       type,
       owner,
+      warned,
       last_opened: dt,
     } = (
       await Businesses.findByPk(business, {
-        attributes: ["name", "type", "owner", "last_opened"],
+        attributes: ["name", "type", "owner", "warned", "last_opened"],
       })
     ).dataValues;
 
@@ -64,7 +65,7 @@ module.exports = {
 
     try {
       const affectedRows = await Businesses.update(
-        { warned: true },
+        { warned: warned + 1 },
         { where: { id: business } },
       );
 
@@ -82,14 +83,18 @@ module.exports = {
         .setColor(Colours.warning_light)
         .setTitle("Inactivity Warning")
         .setDescription(
-          `## ${businessName} ##\n- Your business has been **inactive** since **${dt.toLocaleDateString(
+          `### ${businessName} ###\n- Your business has been **inactive** since **${dt.toLocaleDateString(
             "en-US",
             {
               // year: "numeric",
               month: "long", // full month name
               day: "numeric", // day of the month
             },
-          )}**.\n- You have **24 hours** to open your business through <#${Channels.marketplace}>.\n- Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.\n- **This is the only warning you will receive for this matter.**`,
+          )}**.\n- You have **${
+            WarningDays - warned > 1
+              ? `${WarningDays - warned} days`
+              : "24" + " hours"
+          }** to open your business through <#${Channels.marketplace}>.\n- Failure to do so will result in the **seizure of your business** and you will no longer have access to business specific crafting or storage.\n- **This is the only warning you will receive for this matter.**`,
         );
 
       await channel.send({ content: `<@${owner}>`, embeds: [warning] });

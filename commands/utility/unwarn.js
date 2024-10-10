@@ -59,7 +59,7 @@ module.exports = {
 
     try {
       const affectedRows = await Businesses.update(
-        { warned: false },
+        { warned: 0 },
         { where: { id: business } },
       );
 

@@ -2,6 +2,8 @@
 
 module.exports.CreateDB = true;
 
+module.exports.WarningDays = 2;
+
 module.exports.Config = {
   // commented out gov. jobs
   jobList: [
