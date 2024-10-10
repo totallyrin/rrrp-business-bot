@@ -29,16 +29,16 @@ module.exports = {
         const description =
           currentBusinesses
             .map((business) => {
-              return `**${business.name}**\n- Type: **${business.type}**${business.owner ? `\n- Owner: <@${business.owner}>` : ""}`;
+              return `### ${business.name} ###\n- Type: **${business.type}**${business.owner ? `\n- Owner: <@${business.owner}>` : ""}`;
             })
             .join("\n") || "No businesses found on this page.";
 
         return new EmbedBuilder()
           .setColor(Colours.neutral_light)
-          .setTitle("Businesses")
+          .setTitle(`Businesses - Page ${page + 1}`)
           .setDescription(
             currentBusinesses.length
-              ? `## Page ${page + 1} ##\n${description}`
+              ? `${description}`
               : "No businesses found.",
           );
       };
