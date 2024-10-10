@@ -32,6 +32,8 @@ Discord bot for keeping track of RRRP businesses.
     - `/removeimage both` - Removes both images from a business
 - `/open` - Displays an 'Open for Business' message
 - `/closed` - Displays a 'Closed for Business' message
+- `/businesses` - Displays a list of all businesses (paginated)
+- `/employees [business]` - Displays a list of all employees of a business
 - `/warn` - Issues an inactivity warning to a business (notifies business owner)
 - `/unwarn` - Remove an inactivity warning from a business (useful if you want to give them multiple
   warning chances)
