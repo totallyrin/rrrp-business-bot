@@ -59,7 +59,7 @@ BUCKET_NAME=
 
 (`GOOGLE_APPLICATION_CREDENTIALS` is the path to your `.json` key file)
 
-5. Fill in roles and channels in `config.js`
+5. Fill in role and channel IDs in `config.js`. Any roles added (you can add more or fewer than those listed by default!) will have 'elevated' permissions, e.g. be able to add/remove businesses, issue warning and seizures
 
 NOTE: If you are using a version lower than 20.6.0, you’ll get `node: bad option: --env-file=.env` and will need to upgrade.
 
