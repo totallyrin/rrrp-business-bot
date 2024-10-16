@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Businesses } = require("../../utils/db");
 const { autocompletes, hasPerms } = require("../../utils/autocompletes");
