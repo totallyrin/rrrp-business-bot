@@ -60,11 +60,8 @@ BUCKET_NAME=
 (`GOOGLE_APPLICATION_CREDENTIALS` is the path to your `.json` key file)
 
 5. Fill in role and channel IDs in `config.js`. Any roles added (you can add more or fewer than those listed by default!) will have 'elevated' permissions, e.g. be able to add/remove businesses, issue warning and seizures
-
-NOTE: If you are using a version lower than 20.6.0, you’ll get `node: bad option: --env-file=.env` and will need to upgrade.
-
-8. Register commands by running `node --env-file=.env deploy-commands.js`
-9. Start the bot by running `node --env-file=.env index.js`
+6. Register commands by running `node deploy-commands.js`
+7. Start the bot by running `node index.js`
 
 Note: Once the bot has run for the first time, change `CreateDB` in `config.js` to `false`. If
 you don't change it to `false`, the database will be reset every time.
